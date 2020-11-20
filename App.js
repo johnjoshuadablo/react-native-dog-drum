@@ -9,6 +9,9 @@ import {
   Dimensions,
 } from 'react-native';
 
+const Sound = require('react-native-sound');
+Sound.setCategory('Playback');
+
 export default function App() {
   const [dogState, setDogState] = useState(dogImgValues.noneTap);
 
@@ -26,11 +29,13 @@ export default function App() {
 
   const onResponderStart = (evt) => {
     setDogState(dogImgValues.bothTap);
+    onSoundBoth();
   };
 
   const onPress = (buttonVal) => {
     // If left is tapped
     if (buttonVal === buttonValues.leftIn) {
+      onSoundLeft();
       if (dogState === dogImgValues.noneTap) {
         setDogState(dogImgValues.leftTap);
         return;
@@ -52,6 +57,7 @@ export default function App() {
 
     // If right is tapped
     if (buttonVal === buttonValues.rightIn) {
+      onSoundRight();
       if (dogState === dogImgValues.noneTap) {
         setDogState(dogImgValues.rightTap);
         return;
@@ -73,15 +79,16 @@ export default function App() {
   };
 
   const onSoundLeft = () => {
-    console.log('Sound left');
+    tapLeftSound.play();
   };
 
   const onSoundRight = () => {
-    console.log('Sound right');
+    tapRightSound.play();
   };
 
   const onSoundBoth = () => {
-    console.log('Sound right');
+    tapLeftSound.play();
+    tapRightSound.play();
   };
 
   return (
@@ -110,6 +117,10 @@ export default function App() {
     </SafeAreaView>
   );
 }
+
+const shakeSound = new Sound('shake.mp3', Sound.MAIN_BUNDLE);
+const tapLeftSound = new Sound('tap_left.wav', Sound.MAIN_BUNDLE);
+const tapRightSound = new Sound('tap_right.wav', Sound.MAIN_BUNDLE);
 
 const buttonValues = {
   leftIn: 'leftIn',
