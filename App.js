@@ -16,6 +16,7 @@ Sound.setCategory('Playback');
 export default function App() {
   const [dogState, setDogState] = useState(dogImgValues.noneTap);
   const [isCatVibing, setCatVibe] = useState(false);
+  const [isInfoVisible, setInfoVisibility] = useState(false);
 
   useEffect(() => {
     RNShake.addEventListener('ShakeEvent', () => {
@@ -122,9 +123,29 @@ export default function App() {
     }
   };
 
+  const renderInfo = () => {
+    if (isInfoVisible) {
+      return (
+        <Text style={styles.infoTxt}>
+          Music and gif is not mine, Please check
+          'https://www.youtube.com/watch?v=NUYvbT6vTPs'
+        </Text>
+      );
+    } else {
+      return null;
+    }
+  };
+
   return (
     <SafeAreaView style={styles.main}>
+      <TouchableOpacity
+        style={styles.infoBtn}
+        onPressIn={() => setInfoVisibility(true)}
+        onPressOut={() => setInfoVisibility(false)}>
+        <Text style={styles.infoTxt}>i</Text>
+      </TouchableOpacity>
       <View style={styles.drummerContainer}>
+        {renderInfo()}
         <Text>Shake for magic</Text>
         <Image style={styles.image} source={dogState} />
         {renderCatGif()}
@@ -203,5 +224,21 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontWeight: '500',
     fontSize: 26,
+  },
+  infoBtn: {
+    top: 18,
+    right: 18,
+    position: 'absolute',
+    height: 20,
+    width: 20,
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'lightgray',
+  },
+  infoTxt: {
+    fontWeight: '400',
+    fontSize: 10,
+    textAlign: 'center',
   },
 });
