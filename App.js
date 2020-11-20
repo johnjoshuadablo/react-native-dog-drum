@@ -15,6 +15,7 @@ Sound.setCategory('Playback');
 
 export default function App() {
   const [dogState, setDogState] = useState(dogImgValues.noneTap);
+  const [isCatVibing, setCatVibe] = useState(false);
 
   useEffect(() => {
     RNShake.addEventListener('ShakeEvent', () => {
@@ -44,7 +45,9 @@ export default function App() {
     if (shakeSound.isPlaying()) {
       return;
     }
-    shakeSound.setVolume(1).play();
+
+    setCatVibe(true);
+    shakeSound.play(() => setCatVibe(false));
   };
 
   const onPress = (buttonVal) => {
@@ -106,11 +109,25 @@ export default function App() {
     tapRightSound.setVolume(1).play();
   };
 
+  const renderCatGif = () => {
+    if (isCatVibing) {
+      return (
+        <Image
+          style={styles.image}
+          source={require('./assets/images/shake.gif')}
+        />
+      );
+    } else {
+      return null;
+    }
+  };
+
   return (
     <SafeAreaView style={styles.main}>
       <View style={styles.drummerContainer}>
         <Text>Shake for magic</Text>
         <Image style={styles.image} source={dogState} />
+        {renderCatGif()}
       </View>
       <View
         onResponderStart={onResponderStart}
