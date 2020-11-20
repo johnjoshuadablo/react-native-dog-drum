@@ -10,6 +10,8 @@ target 'DrummingDog' do
 
   pod 'RNSound', :path => '../node_modules/react-native-sound'
 
+  pod 'react-native-shake', :path => '../node_modules/react-native-shake'
+
   target 'DrummingDogTests' do
     inherit! :complete
     # Pods for testing

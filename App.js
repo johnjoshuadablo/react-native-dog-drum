@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   Image,
   StyleSheet,
@@ -8,12 +8,20 @@ import {
   TouchableOpacity,
   Dimensions,
 } from 'react-native';
+import RNShake from 'react-native-shake';
 
 const Sound = require('react-native-sound');
 Sound.setCategory('Playback');
 
 export default function App() {
   const [dogState, setDogState] = useState(dogImgValues.noneTap);
+
+  useEffect(() => {
+    RNShake.addEventListener('ShakeEvent', () => {
+      onShake();
+    });
+    return () => RNShake.removeEventListener('ShakeEvent');
+  }, []);
 
   const onStartShouldSetResponder = (evt) => {
     // If both button is Pressed
@@ -30,6 +38,13 @@ export default function App() {
   const onResponderStart = (evt) => {
     setDogState(dogImgValues.bothTap);
     onSoundBoth();
+  };
+
+  const onShake = () => {
+    if (shakeSound.isPlaying()) {
+      return;
+    }
+    shakeSound.setVolume(1).play();
   };
 
   const onPress = (buttonVal) => {
@@ -79,21 +94,22 @@ export default function App() {
   };
 
   const onSoundLeft = () => {
-    tapLeftSound.play();
+    tapLeftSound.setVolume(1).play();
   };
 
   const onSoundRight = () => {
-    tapRightSound.play();
+    tapRightSound.setVolume(1).play();
   };
 
   const onSoundBoth = () => {
-    tapLeftSound.play();
-    tapRightSound.play();
+    tapLeftSound.setVolume(1).play();
+    tapRightSound.setVolume(1).play();
   };
 
   return (
     <SafeAreaView style={styles.main}>
       <View style={styles.drummerContainer}>
+        <Text>Shake for magic</Text>
         <Image style={styles.image} source={dogState} />
       </View>
       <View
